@@ -1,0 +1,13 @@
+#OpenLDAP
+/var/log/ldap.log {
+	missingok
+	notifempty
+	compress
+	weekly
+	rotate 10
+	size=50M
+	sharedscripts
+	postrotate
+/etc/init.d/rsyslog restart
+endscript
+}

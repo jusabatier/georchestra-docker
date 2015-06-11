@@ -42,3 +42,23 @@ database:
     DB_GEONETWORK_PASS: {{DB_GEONETWORK_PASS}}
     GEORCHESTRA_HOSTNAME: {{GEORCHESTRA_HOSTNAME}}
     GEOSERVER_USER_PASS: {{GEOSERVER_USER_PASS}}
+
+ldap:
+  build: ./ldap
+  ports:
+    - "389:389"
+  volumes:
+    - ./logs:/var/log/ldap
+    - ./volumes/ldap_data/slapd.d:/etc/ldap/slapd.d
+    - ./volumes/ldap_data/lib:/var/lib/ldap
+    - ./ldap/cron.weekly:/etc/cron.weekly
+  environment:
+    SLAPD_PASSWORD: {{SLAPD_PASSWORD}}
+    GEOSERVER_USER_PASS: {{GEOSERVER_USER_PASS}}
+    SASL_ENABLED: {{SASL_ENABLED}}
+    SASL_REMOTE_LDAP_IP: {{REMOTE_LDAP_IP}}
+    SASL_REMOTE_SEARCH_BASE: {{REMOTE_SEARCH_BASE}}
+    SASL_REMOTE_FILTER: {{REMOTE_FILTER}}
+    SASL_REMOTE_BIND_DN: {{SASL_REMOTE_BIND_DN}}
+    SASL_REMOTE_PASSWORD: {{SASL_REMOTE_PASSWORD}}
+

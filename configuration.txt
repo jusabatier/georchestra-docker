@@ -26,3 +26,17 @@ DB_GEONETWORK_PASS="geonetwork"
 
 ## LDAP Configuration
 GEOSERVER_USER_PASS="geoserved_privileged"
+SLAPD_PASSWORD="secret"
+## SASL Configuration for remote LDAP user connection
+# Set to true for enable SASL
+SASL_ENABLED="false"
+# Remote LDAP IP to connect
+SASL_REMOTE_LDAP_IP=""
+# Search base DN on remote LDAP
+SASL_REMOTE_SEARCH_BASE=""
+# Filter for match users on remote LDAP, example: "sAMAccountName=%U"
+SASL_REMOTE_FILTER=""
+# DN to use for connect to remote AD
+SASL_REMOTE_BIND_DN=""
+# Password for connect to the remote AD
+SASL_REMOTE_PASSWORD=""
