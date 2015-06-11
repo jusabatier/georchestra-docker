@@ -27,3 +27,18 @@ nginx:
     SSL_ORGANISATION: {{SSL_ORGANISATION}}
     SSL_UNIT: {{SSL_UNIT}}
     GEORCHESTRA_HOSTNAME: {{GEORCHESTRA_HOSTNAME}}
+
+database:
+  build: ./postgresql
+  ports:
+    - "5432:5432"
+  volumes:
+    - ./logs:/var/log/postgres
+    - ./volumes/postgresql_data:/var/lib/postgresql
+  environment:
+    DB_MAIN_USER: {{DB_MAIN_USER}}
+    DB_MAIN_USER_PASS: {{DB_MAIN_USER_PASS}}
+    DB_GEORCHESTRA_PASS: {{DB_GEORCHESTRA_PASS}}
+    DB_GEONETWORK_PASS: {{DB_GEONETWORK_PASS}}
+    GEORCHESTRA_HOSTNAME: {{GEORCHESTRA_HOSTNAME}}
+    GEOSERVER_USER_PASS: {{GEOSERVER_USER_PASS}}

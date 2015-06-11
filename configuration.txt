@@ -17,3 +17,12 @@ SSL_STATE="Auvergne"
 SSL_LOCALITY="Le Puy-en-Velay"
 SSL_ORGANISATION="Georchestra"
 SSL_UNIT="Docker Dev"
+
+## Database configuration
+DB_MAIN_USER="admin"
+DB_MAIN_USER_PASS="admin"
+DB_GEORCHESTRA_PASS="georchestra"
+DB_GEONETWORK_PASS="geonetwork"
+
+## LDAP Configuration
+GEOSERVER_USER_PASS="geoserved_privileged"
