@@ -1,0 +1,19 @@
+#########################################################################
+#
+# Configurations
+#
+#########################################################################
+
+## Host configuration
+GEORCHESTRA_HOSTNAME="example.georchestra-docker.fr"
+GEORCHESTRA_PUBLIC_IP="10.1.1.149"
+
+## SSL Configuration
+## If you have already georchestra.chained.crt and georchestra.key files for your domain (for prod),
+## you can put them in nginx/georchestra-site/ssl directory and skip it.
+SSL_PASSPHRASE="georchestra-docker"
+SSL_COUNTRY="FR"
+SSL_STATE="Auvergne"
+SSL_LOCALITY="Le Puy-en-Velay"
+SSL_ORGANISATION="Georchestra"
+SSL_UNIT="Docker Dev"
