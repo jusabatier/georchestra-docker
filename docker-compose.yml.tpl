@@ -62,3 +62,51 @@ ldap:
     SASL_REMOTE_BIND_DN: {{SASL_REMOTE_BIND_DN}}
     SASL_REMOTE_PASSWORD: {{SASL_REMOTE_PASSWORD}}
 
+proxy:
+  build: ./proxy
+  privileged: true
+  ports:
+    - "8080:8080"
+  links:
+    - database:database_host
+    - ldap:ldap_host
+    - cas:cas_host
+    - header:header_host
+  volumes:
+    - ./logs:/tmp/georchestra
+    - ./logs/tomcat/proxy:/usr/local/tomcat/logs
+  environment:
+    JAVA_OPTS: "-Djava.awt.headless=true -XX:+UseConcMarkSweepGC -Xms512m -Xmx512m"
+  extra_hosts:
+    - {{GEORCHESTRA_HOSTNAME}}:{{GEORCHESTRA_PUBLIC_IP}}
+    - proxy_host:127.0.0.1
+
+cas:
+  build: ./cas
+  privileged: true
+  ports:
+    - "8080"
+  links:
+    - database:database_host
+    - ldap:ldap_host
+  volumes:
+    - ./logs:/tmp/georchestra
+    - ./logs/tomcat/cas:/usr/local/tomcat/logs
+  environment:
+    JAVA_OPTS: "-Djava.awt.headless=true -XX:+UseConcMarkSweepGC -Xms512m -Xmx512m"
+  extra_hosts:
+    - {{GEORCHESTRA_HOSTNAME}}:{{GEORCHESTRA_PUBLIC_IP}}
+    - cas_host:127.0.0.1
+
+header:
+  build: ./header
+  privileged: true
+  ports:
+    - "8080"
+  volumes:
+    - ./logs:/tmp/georchestra
+    - ./logs/tomcat/header:/usr/local/tomcat/logs
+  environment:
+    JAVA_OPTS: "-Djava.awt.headless=true -XX:+UseConcMarkSweepGC -Xms256m -Xmx256m"
+  extra_hosts:
+    - {{GEORCHESTRA_HOSTNAME}}:{{GEORCHESTRA_PUBLIC_IP}}
