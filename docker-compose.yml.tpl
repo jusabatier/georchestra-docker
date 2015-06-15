@@ -74,6 +74,9 @@ proxy:
     - header:header_host
     - geonetwork:geonetwork_host
     - mapfishapp:mapfishapp_host
+    - analytics:analytics_host
+    - catalogapp:catalogapp_host
+    - downloadform:downloadform_host
   volumes:
     - ./logs:/tmp/georchestra
     - ./logs/tomcat/proxy:/usr/local/tomcat/logs
@@ -143,5 +146,50 @@ mapfishapp:
     - ./logs/tomcat/mapfishapp:/usr/local/tomcat/logs
   environment:
     JAVA_OPTS: "-Djava.awt.headless=true -XX:+UseConcMarkSweepGC -Xms2G -Xmx2G"
+  extra_hosts:
+    - {{GEORCHESTRA_HOSTNAME}}:{{GEORCHESTRA_PUBLIC_IP}}
+
+analytics:
+  build: ./analytics
+  privileged: true
+  ports:
+    - "8080"
+  links:
+    - database:database_host
+  volumes:
+    - ./logs:/tmp/georchestra
+    - ./logs/tomcat/analytics:/usr/local/tomcat/logs
+  environment:
+    JAVA_OPTS: "-Djava.awt.headless=true -XX:+UseConcMarkSweepGC -Xms256m -Xmx256m"
+  extra_hosts:
+    - {{GEORCHESTRA_HOSTNAME}}:{{GEORCHESTRA_PUBLIC_IP}}
+
+catalogapp:
+  build: ./catalogapp
+  privileged: true
+  ports:
+    - "8080"
+  links:
+    - database:database_host
+  volumes:
+    - ./logs:/tmp/georchestra
+    - ./logs/tomcat/catalogapp:/usr/local/tomcat/logs
+  environment:
+    JAVA_OPTS: "-Djava.awt.headless=true -XX:+UseConcMarkSweepGC -Xms256m -Xmx256m"
+  extra_hosts:
+    - {{GEORCHESTRA_HOSTNAME}}:{{GEORCHESTRA_PUBLIC_IP}}
+
+downloadform:
+  build: ./downloadform
+  privileged: true
+  ports:
+    - "8080"
+  links:
+    - database:database_host
+  volumes:
+    - ./logs:/tmp/georchestra
+    - ./logs/tomcat/downloadform:/usr/local/tomcat/logs
+  environment:
+    JAVA_OPTS: "-Djava.awt.headless=true -XX:+UseConcMarkSweepGC -Xms256m -Xmx256m"
   extra_hosts:
     - {{GEORCHESTRA_HOSTNAME}}:{{GEORCHESTRA_PUBLIC_IP}}
