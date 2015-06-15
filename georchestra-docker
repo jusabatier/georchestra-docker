@@ -81,7 +81,7 @@ else
 	perl -pe 's/{{(.*?)}}/$ENV{$1}/g' "docker-compose.yml.tpl" > docker-compose.yml
 	
 	if [ $1 == "build" ]; then
-		if [[ ! -f proxy/ROOT.war || ! -f cas/cas.war || ! -f header/header.war || ! -f geonetwork/geonetwork.war || ! -f mapfishapp/mapfishapp.war || ! -f analytics/analytics.war || !-f catalogapp/catalogapp.war || ! -f downloadform/downloadform.war || ! -f extractorapp/extractorapp.war || ! -f ldapadmin/ldapadmin.war || ! -f geofence/geofence.war || ! -f geoserver/geoserver.war || ! -f geowebcache/geowebcache.war ]]; then
+		if [[ ! -f proxy/ROOT.war || ! -f cas/cas.war || ! -f header/header.war || ! -f geonetwork/geonetwork.war || ! -f mapfishapp/mapfishapp.war || ! -f analytics/analytics.war || ! -f catalogapp/catalogapp.war || ! -f downloadform/downloadform.war || ! -f extractorapp/extractorapp.war || ! -f ldapadmin/ldapadmin.war || ! -f geofence/geofence.war || ! -f geoserver/geoserver.war || ! -f geowebcache/geowebcache.war ]]; then
 			echo "Some WARS not exists, have you added them in the application config folder ?"
 			echo "You can do that by using the import-wars argument after compiling Georchestra with geofence, or manually in the corresponding application folder."
 			exit 1
