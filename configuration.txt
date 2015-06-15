@@ -7,6 +7,14 @@
 ## Host configuration
 GEORCHESTRA_HOSTNAME="example.georchestra-docker.fr"
 GEORCHESTRA_PUBLIC_IP="10.1.1.149"
+# Caution: no accentuated chars are supported in this string
+GEORCHESTRA_INSTANCE_NAME="geOrchestra"
+# May be one of the following: fr, es, en, de
+GEORCHESTRA_LANGUAGE="fr"
+GEORCHESTRA_GEONETWORK_LANGUAGE="fre"
+GEORCHESTRA_DOWNLOADFORM_ACTIVATED="false"
+GEORCHESTRA_DOWNLOADFORM_PDFURL=""
+GEORCHESTRA_ANALYTICS_ACTIVATED="false"
 
 ## SSL Configuration
 ## If you have already georchestra.chained.crt and georchestra.key files for your domain (for prod),
@@ -25,7 +33,7 @@ DB_GEORCHESTRA_PASS="georchestra"
 DB_GEONETWORK_PASS="geonetwork"
 
 ## LDAP Configuration
-GEOSERVER_USER_PASS="geoserved_privileged"
+GEOSERVER_USER_PASS="geoserver_privileged"
 SLAPD_PASSWORD="secret"
 ## SASL Configuration for remote LDAP user connection
 # Set to true for enable SASL
@@ -40,3 +48,49 @@ SASL_REMOTE_FILTER=""
 SASL_REMOTE_BIND_DN=""
 # Password for connect to the remote AD
 SASL_REMOTE_PASSWORD=""
+
+## GeoFence Configuration
+GEOFENCE_BASELAYER_NAME="unearthedoutdoors:truemarble"
+GEOFENCE_BASELAYER_TITLE="True Marble"
+GEOFENCE_BASELAYER_FORMAT="image/jpeg"
+GEOFENCE_BASELAYER_STYLE=""
+GEOFENCE_MAPCENTER_LON="273950.30933606"
+GEOFENCE_MAPCENTER_LAT="5901246.3506556"
+GEOFENCE_MAPZOOM="4"
+GEOFENCE_MAP_MAX_RESOLUTION="156543.03390625"
+GEOFENCE_MAP_MAX_EXTENT="-20037508.34,-20037508.34,20037508.34,20037508.34"
+GEOFENCE_MAP_PROJECTION="EPSG:3857"
+
+## Extractor Configuration
+EXTRACTOR_MAX_COVERAGE_EXTRACTION_SIZE="99999999"
+EXTRACTOR_MAX_EXTRACTIONS="5"
+EXTRACTOR_EXTRACTION_FOLDER_PREFIX="extraction-"
+EXTRACTOR_EMAIL_SUBJECT="Your extraction request"
+
+## Proxy Configuration
+PROXY_CHECKHEALTH="false"
+
+## LDAPAdmin Configuration
+# ReCaptcha keys for your own domain: 
+# (these are the ones for sdi.georchestra.org, they won't work for you !!!)
+LDAPADMIN_RECAPTCHA_PRIVATE_KEY="6LcfjucSAAAAAKcnHp14epYOiWOIUfEculd4PvLV"
+LDAPADMIN_RECAPTCHA_PUBLIC_KEY="6LcfjucSAAAAAKtNoK5r7IIXxBT-33znNJUgeYg1"
+# Emails subjects
+LDAPADMIN_SUBJECT_ACCOUNT_CREATED="Your account has been created"
+LDAPADMIN_SUBJECT_ACCOUNT_IN_PROGRESS="Your new account is waiting for validation"
+LDAPADMIN_SUBJECT_REQUIRES_MODERATION="New account waiting for validation"
+LDAPADMIN_SUBJECT_CHANGE_PASSWORD="Update your password"
+# Moderated signup or free account creation ?
+LDAPADMIN_MODERATED_SIGNUP="true"
+# List of required fields in forms (CSV list) - possible values are:
+# firstName,surname,phone,facsimile,org,title,description,postalAddress
+# Note that email, uid, password and confirmPassword are always required
+LDAPADMIN_REQUIRED_FIELDS="firstName,surname"
+
+## Emails Configuration
+GEORCHESTRA_MAIL_SMTP_HOST="localhost"
+GEORCHESTRA_MAIL_SMTP_PORT="25"
+GEORCHESTRA_MAIL_REPLY_TO="psc\@georchestra.org"
+GEORCHESTRA_MAIL_FROM="psc\@georchestra.org"
+GEORCHESTRA_MAIL_ADMIN_EMAIL="psc\@georchestra.org"
+GEORCHESTRA_MAIL_HTML="false"
