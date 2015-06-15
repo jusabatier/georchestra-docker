@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -exv
+set -e
 
 if [ $# -eq 0 ]; then
   echo "No argument supplied !"
