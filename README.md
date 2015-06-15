@@ -52,6 +52,12 @@ Note: If you get a "Permission denied" error, your /usr/local/bin directory prob
 
 ## Configure Georchestra Docker
 
+First get this project via git : 
+
+```
+git clone --recursive https://github.com/jusabatier/georchestra-docker.git
+```
+
 You can configure a lot of parameters in the configuration.txt file.
 
 ## Use georchestra-docker to generate images, template, ...
