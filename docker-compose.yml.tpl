@@ -73,6 +73,7 @@ proxy:
     - cas:cas_host
     - header:header_host
     - geonetwork:geonetwork_host
+    - mapfishapp:mapfishapp_host
   volumes:
     - ./logs:/tmp/georchestra
     - ./logs/tomcat/proxy:/usr/local/tomcat/logs
@@ -127,5 +128,20 @@ geonetwork:
     - ./volumes/geonetwork_datadir:/usr/local/tomcat/geonetwork_datadir
   environment:
     JAVA_OPTS: "-Djava.awt.headless=true -XX:+UseConcMarkSweepGC -Xms2G -Xmx2G -Dgeonetwork.dir=/usr/local/tomcat/geonetwork_datadir -Dgeonetwork.schema.dir=/usr/local/tomcat/geonetwork_datadir/config/schema_plugins -Dgeonetwork.jeeves.configuration.overrides.file=/usr/local/tomcat/webapps/geonetwork/WEB-INF/config-overrides-georchestra.xml -Djava.util.prefs.userRoot=/tmp/georchestra -Djava.util.prefs.systemRoot=/tmp/georchestra"
+  extra_hosts:
+    - {{GEORCHESTRA_HOSTNAME}}:{{GEORCHESTRA_PUBLIC_IP}}
+
+mapfishapp:
+  build: ./mapfishapp
+  privileged: true
+  ports:
+    - "8080"
+  links:
+    - database:database_host
+  volumes:
+    - ./logs:/tmp/georchestra
+    - ./logs/tomcat/mapfishapp:/usr/local/tomcat/logs
+  environment:
+    JAVA_OPTS: "-Djava.awt.headless=true -XX:+UseConcMarkSweepGC -Xms2G -Xmx2G"
   extra_hosts:
     - {{GEORCHESTRA_HOSTNAME}}:{{GEORCHESTRA_PUBLIC_IP}}
