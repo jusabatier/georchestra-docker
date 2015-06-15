@@ -1,0 +1,7 @@
+[submodule "volumes/geonetwork_datadir"]
+	path = volumes/geonetwork_datadir
+	url = https://github.com/georchestra/geonetwork_minimal_datadir.git
+[submodule "volumes/geoserver_datadir"]
+	path = volumes/geoserver_datadir
+	url = https://github.com/georchestra/geoserver_minimal_datadir.git
+	branch = geofence
