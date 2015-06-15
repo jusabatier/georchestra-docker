@@ -80,6 +80,9 @@ proxy:
     - downloadform:downloadform_host
     - extractorapp:extractorapp_host
     - ldapadmin:ldapadmin_host
+    - geoserver:geoserver_host
+    - geofence:geofence_host
+    - geowebcache:geowebcache_host
   volumes:
     - ./logs:/tmp/georchestra
     - ./logs/tomcat/proxy:/usr/local/tomcat/logs
@@ -229,4 +232,49 @@ ldapadmin:
   extra_hosts:
     - {{GEORCHESTRA_HOSTNAME}}:{{GEORCHESTRA_PUBLIC_IP}}
 
+geofence:
+  build: ./geofence
+  privileged: true
+  ports:
+    - "8080"
+  links:
+    - database:database_host
+    - ldap:ldap_host
+  volumes:
+    - ./logs:/tmp/georchestra
+    - ./logs/tomcat/geofence:/usr/local/tomcat/logs
+  environment:
+    JAVA_OPTS: "-Djava.awt.headless=true -XX:+UseConcMarkSweepGC -Xms512m -Xmx512m"
+  extra_hosts:
+    - {{GEORCHESTRA_HOSTNAME}}:{{GEORCHESTRA_PUBLIC_IP}}
 
+geoserver:
+  build: ./geoserver
+  privileged: true
+  ports:
+    - "8080"
+  links:
+    - database:database_host
+    - geofence:geofence_host
+  volumes:
+    - ./logs:/tmp/georchestra
+    - ./logs/tomcat/geoserver:/usr/local/tomcat/logs
+    - ./volumes/geoserver_datadir:/usr/local/tomcat/geoserver_datadir
+  environment:
+    JAVA_OPTS: "-Djava.awt.headless=true -XX:+UseConcMarkSweepGC -Xms2G -Xmx2G -XX:PermSize=256m -DGEOSERVER_DATA_DIR=/usr/local/tomcat/geoserver_datadir -Dfile.encoding=UTF8 -Djavax.servlet.request.encoding=UTF-8 -Djavax.servlet.response.encoding=UTF-8 -server -XX:+UseParNewGC -XX:ParallelGCThreads=2 -XX:SoftRefLRUPolicyMSPerMB=36000 -XX:NewRatio=2 -XX:+AggressiveOpts -Djava.library.path=/usr/lib/jni:/opt/libjpeg-turbo/lib64"
+  extra_hosts:
+    - {{GEORCHESTRA_HOSTNAME}}:{{GEORCHESTRA_PUBLIC_IP}}
+
+geowebcache:
+  build: ./geowebcache
+  privileged: true
+  ports:
+    - "8080"
+  volumes:
+    - ./logs:/tmp/georchestra
+    - ./logs/tomcat/geowebcache:/usr/local/tomcat/logs
+    - ./volumes/geowebcache_cachedir:/usr/local/tomcat/geowebcache_cachedir
+  environment:
+    JAVA_OPTS: "-Djava.awt.headless=true -XX:+UseConcMarkSweepGC -Xms1G -Xmx1G -XX:PermSize=256m -Djava.library.path=/usr/lib/jni -DGEOWEBCACHE_CACHE_DIR=/usr/local/tomcat/geowebcache_cachedir"
+  extra_hosts:
+    - {{GEORCHESTRA_HOSTNAME}}:{{GEORCHESTRA_PUBLIC_IP}}
