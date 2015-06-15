@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 if [ $# -eq 0 ]; then
   echo "No argument supplied !"
   exit 0
@@ -26,8 +28,65 @@ if [ $1 == "template" ]; then
 
 	perl -pe 's/{{(.*?)}}/$ENV{$1}/g' "template-config/build_support/GenerateConfig.groovy" > template/build_support/GenerateConfig.groovy
 	perl -pe 's/{{(.*?)}}/$ENV{$1}/g' "template-config/build_support/shared.maven.filters" > template/build_support/shared.maven.filters
+else if [ $1 == "import-wars" ]; then
+	rm -rf ./wars
+	mkdir wars
+
+	find ~/.m2/repository/ -name "*$VERSION-$CONFIG.war" -exec cp {} ./wars \;
+	
+	if [[ ! -f wars/security-proxy-$VERSION-$CONFIG.war || ! -f wars/cas-server-webapp-$VERSION-$CONFIG.war || ! -f wars/header-$VERSION-$CONFIG.war || ! -f wars/geonetwork-main-$VERSION-$CONFIG.war || ! -f wars/mapfishapp-$VERSION-$CONFIG.war || ! -f wars/analytics-$VERSION-$CONFIG.war || ! -f wars/catalogapp-$VERSION-$CONFIG.war || ! -f wars/downloadform-$VERSION-$CONFIG.war || ! -f wars/extractorapp-$VERSION-$CONFIG.war || ! -f wars/ldapadmin-$VERSION-$CONFIG.war || ! -f wars/geofence-webapp-$VERSION-$CONFIG.war || ! -f wars/geoserver-webapp-$VERSION-$CONFIG.war || ! -f wars/geowebcache-webapp-$VERSION-$CONFIG.war ]]; then
+		echo "Some application WARS were not found in ~/.m2/repository, have you build all Georchestra modules ?"
+		exit 1
+	fi
+
+	rm -rf proxy/ROOT.war
+	cp wars/security-proxy-$VERSION-$CONFIG.war proxy/ROOT.war
+
+	rm -rf cas/cas.war
+	cp wars/cas-server-webapp-$VERSION-$CONFIG.war cas/cas.war
+
+	rm -rf header/header.war
+	cp wars/header-$VERSION-$CONFIG.war header/header.war
+
+	rm -rf geonetwork/geonetwork.war
+	cp wars/geonetwork-main-$VERSION-$CONFIG.war geonetwork/geonetwork.war
+
+	rm -rf mapfishapp/mapfishapp.war
+	cp wars/mapfishapp-$VERSION-$CONFIG.war mapfishapp/mapfishapp.war
+
+	rm -rf analytics/analytics.war
+	cp wars/analytics-$VERSION-$CONFIG.war analytics/analytics.war
+
+	rm -rf catalogapp/catalogapp.war
+	cp wars/catalogapp-$VERSION-$CONFIG.war catalogapp/catalogapp.war
+
+	rm -rf downloadform/downloadform.war
+	cp wars/downloadform-$VERSION-$CONFIG.war downloadform/downloadform.war
+
+	rm -rf extractorapp/extractorapp.war
+	cp wars/extractorapp-$VERSION-$CONFIG.war extractorapp/extractorapp.war
+
+	rm -rf ldapadmin/ldapadmin.war
+	cp wars/ldapadmin-$VERSION-$CONFIG.war ldapadmin/ldapadmin.war
+
+	rm -rf geofence/geofence.war
+	cp wars/geofence-webapp-$VERSION-$CONFIG.war geofence/geofence.war
+
+	rm -rf geoserver/geoserver.war
+	cp wars/geoserver-webapp-$VERSION-$CONFIG.war geoserver/geoserver.war
+
+	rm -rf geowebcache/geowebcache.war
+	cp wars/geowebcache-webapp-$VERSION-$CONFIG.war geowebcache/geowebcache.war
 else
 	perl -pe 's/{{(.*?)}}/$ENV{$1}/g' "docker-compose.yml.tpl" > docker-compose.yml
+	
+	if [ $1 == "build" ]; then
+		if [[ ! -f proxy/ROOT.war || ! -f cas/cas.war || ! -f header/header.war || ! -f geonetwork/geonetwork.war || ! -f mapfishapp/mapfishapp.war || ! -f analytics/analytics.war || !-f catalogapp/catalogapp.war || ! -f downloadform/downloadform.war || ! -f extractorapp/extractorapp.war || ! -f ldapadmin/ldapadmin.war || ! -f geofence/geofence.war || ! -f geoserver/geoserver.war || ! -f geowebcache/geowebcache.war ]]; then
+			echo "Some WARS not exists, have you added them in the application config folder ?"
+			echo "You can do that by using the import-wars argument after compiling Georchestra with geofence, or manually in the corresponding application folder."
+			exit 1
+		fi
+	fi
 
 	docker-compose $@
 fi

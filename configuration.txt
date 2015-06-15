@@ -4,6 +4,12 @@
 #
 #########################################################################
 
+## WARS import Configuration
+# Version builded
+VERSION="14.12"
+# Configuration template to use 
+CONFIG="docker-config"
+
 ## Host configuration
 GEORCHESTRA_HOSTNAME="example.georchestra-docker.fr"
 GEORCHESTRA_PUBLIC_IP="10.1.1.149"
