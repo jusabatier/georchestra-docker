@@ -17,6 +17,7 @@ nginx:
     - ./nginx/georchestra-site:/usr/share/nginx/georchestra
   links:
     - php:php_host
+    - proxy:proxy_host
   extra_hosts:
     - {{GEORCHESTRA_HOSTNAME}}:{{GEORCHESTRA_PUBLIC_IP}}
   environment:
@@ -78,6 +79,7 @@ proxy:
     - catalogapp:catalogapp_host
     - downloadform:downloadform_host
     - extractorapp:extractorapp_host
+    - ldapadmin:ldapadmin_host
   volumes:
     - ./logs:/tmp/georchestra
     - ./logs/tomcat/proxy:/usr/local/tomcat/logs
@@ -210,3 +212,21 @@ extractorapp:
     JAVA_OPTS: "-Djava.awt.headless=true -XX:+UseConcMarkSweepGC -Xms2G -Xmx2G -Dorg.geotools.referencing.forceXY=true -Dextractor.storage.dir=/usr/local/tomcat/extractor_tmpdir -Djava.util.prefs.userRoot=/tmp/georchestra -Djava.util.prefs.systemRoot=/tmp/georchestra"
   extra_hosts:
     - {{GEORCHESTRA_HOSTNAME}}:{{GEORCHESTRA_PUBLIC_IP}}
+
+ldapadmin:
+  build: ./ldapadmin
+  privileged: true
+  ports:
+    - "8080"
+  links:
+    - database:database_host
+    - ldap:ldap_host
+  volumes:
+    - ./logs:/tmp/georchestra
+    - ./logs/tomcat/ldapadmin:/usr/local/tomcat/logs
+  environment:
+    JAVA_OPTS: "-Djava.awt.headless=true -XX:+UseConcMarkSweepGC -Xms256m -Xmx256m"
+  extra_hosts:
+    - {{GEORCHESTRA_HOSTNAME}}:{{GEORCHESTRA_PUBLIC_IP}}
+
+
