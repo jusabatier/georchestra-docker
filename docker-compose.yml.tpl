@@ -72,6 +72,7 @@ proxy:
     - ldap:ldap_host
     - cas:cas_host
     - header:header_host
+    - geonetwork:geonetwork_host
   volumes:
     - ./logs:/tmp/georchestra
     - ./logs/tomcat/proxy:/usr/local/tomcat/logs
@@ -108,5 +109,23 @@ header:
     - ./logs/tomcat/header:/usr/local/tomcat/logs
   environment:
     JAVA_OPTS: "-Djava.awt.headless=true -XX:+UseConcMarkSweepGC -Xms256m -Xmx256m"
+  extra_hosts:
+    - {{GEORCHESTRA_HOSTNAME}}:{{GEORCHESTRA_PUBLIC_IP}}
+
+geonetwork:
+  build: ./geonetwork
+  privileged: true
+  ports:
+    - "8080"
+  links:
+    - database:database_host
+    - ldap:ldap_host
+    - cas:cas_host
+  volumes:
+    - ./logs:/tmp/georchestra
+    - ./logs/tomcat/geonetwork:/usr/local/tomcat/logs
+    - ./volumes/geonetwork_datadir:/usr/local/tomcat/geonetwork_datadir
+  environment:
+    JAVA_OPTS: "-Djava.awt.headless=true -XX:+UseConcMarkSweepGC -Xms2G -Xmx2G -Dgeonetwork.dir=/usr/local/tomcat/geonetwork_datadir -Dgeonetwork.schema.dir=/usr/local/tomcat/geonetwork_datadir/config/schema_plugins -Dgeonetwork.jeeves.configuration.overrides.file=/usr/local/tomcat/webapps/geonetwork/WEB-INF/config-overrides-georchestra.xml -Djava.util.prefs.userRoot=/tmp/georchestra -Djava.util.prefs.systemRoot=/tmp/georchestra"
   extra_hosts:
     - {{GEORCHESTRA_HOSTNAME}}:{{GEORCHESTRA_PUBLIC_IP}}
