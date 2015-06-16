@@ -79,6 +79,8 @@ First you have to launch a full compilation for georchestra, for example in geor
 ./mvn -Dserver=docker-config -DskipTests -Pgeofence -Pgdal,kml,pyramid,jp2k,ogr,wps,inspire,libjpeg-turbo,app-schema,charts,control-flow '-Dgeoserver.war.excludes=WEB-INF/lib/*gwc*.jar,WEB-INF/lib/jai_*.jar' clean install
 ```
 
+More infos at https://github.com/georchestra/georchestra/blob/14.12/doc/build.md
+
 And after compilation end, use the command to import WARS in Docker application's configuration directory :
 ```
 ./georchestra-docker import-wars
