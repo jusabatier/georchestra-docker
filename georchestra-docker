@@ -39,7 +39,7 @@ elif [ "$1" == "import-wars" ]; then
 
 	find ~/.m2/repository/ -name "*$VERSION-$CONFIG.war" -exec cp {} ./wars \;
 	
-	if [ ! -f wars/security-proxy-$VERSION-$CONFIG.war ] || [ ! -f wars/cas-server-webapp-$VERSION-$CONFIG.war ] || [ ! -f wars/header-$VERSION-$CONFIG.war ] || [ ! -f wars/geonetwork-main-$VERSION-$CONFIG.war ] || [ ! -f wars/mapfishapp-$VERSION-$CONFIG.war ] || [ ! -f wars/analytics-$VERSION-$CONFIG.war ] || [ ! -f wars/catalogapp-$VERSION-$CONFIG.war ] || [ ! -f wars/downloadform-$VERSION-$CONFIG.war ] || [ ! -f wars/extractorapp-$VERSION-$CONFIG.war ] || [ ! -f wars/ldapadmin-$VERSION-$CONFIG.war ] || [ ! -f wars/geofence-webapp-$VERSION-$CONFIG.war ] || [ ! -f wars/geoserver-webapp-$VERSION-$CONFIG.war ] || [ ! -f wars/geowebcache-webapp-$VERSION-$CONFIG.war ]; then
+	if [ ! -f wars/security-proxy-"$VERSION"-"$CONFIG".war ] || [ ! -f wars/cas-server-webapp-"$VERSION"-"$CONFIG".war ] || [ ! -f wars/header-"$VERSION"-"$CONFIG".war ] || [ ! -f wars/geonetwork-main-"$VERSION"-"$CONFIG".war ] || [ ! -f wars/mapfishapp-"$VERSION"-"$CONFIG".war ] || [ ! -f wars/analytics-"$VERSION"-"$CONFIG".war ] || [ ! -f wars/catalogapp-"$VERSION"-"$CONFIG".war ] || [ ! -f wars/downloadform-"$VERSION"-"$CONFIG".war ] || [ ! -f wars/extractorapp-"$VERSION"-"$CONFIG".war ] || [ ! -f wars/ldapadmin-"$VERSION"-"$CONFIG".war ] || [ ! -f wars/geofence-webapp-"$VERSION"-"$CONFIG".war ] || [ ! -f wars/geoserver-webapp-"$VERSION"-"$CONFIG".war ] || [ ! -f wars/geowebcache-webapp-"$VERSION"-"$CONFIG".war ]; then
 		echo "Some application WARS were not found in ~/.m2/repository, have you build all Georchestra modules ?"
 		exit 1
 	fi
