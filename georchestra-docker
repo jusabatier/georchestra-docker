@@ -11,6 +11,11 @@ set -a
 . configuration.txt
 set +a
 
+PERMISSIONS=$(stat -c "%a" -L volumes/postgresql_data)
+if [[ $PERMISSIONS != "777" ]]; then
+	chmod 777 volumes/postgresql_data
+fi
+
 if [ "$1" == "template" ]; then
 	if [ -d "template" ]; then
 		echo "The template folder already exist, run this script will remove it and any changes will be lost."
