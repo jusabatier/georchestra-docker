@@ -28,4 +28,6 @@ docker ps
 
 ## See light running containers infos
 
+```
 docker-compose ps
+```
