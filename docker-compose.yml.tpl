@@ -34,7 +34,7 @@ database:
   ports:
     - "5432:5432"
   volumes:
-    - ./logs:/var/log/postgres
+    - ./logs:/var/log/postgresql
     - ./volumes/postgresql_data:/var/lib/postgresql
   environment:
     DB_MAIN_USER: {{DB_MAIN_USER}}
