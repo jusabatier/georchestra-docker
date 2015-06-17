@@ -16,6 +16,8 @@ if [[ $PERMISSIONS != "777" ]]; then
 	chmod 777 volumes/postgresql_data
 fi
 
+chmod 777 logs
+
 if [ "$1" == "template" ]; then
 	if [ -d "template" ]; then
 		echo "The template folder already exist, run this script will remove it and any changes will be lost."
