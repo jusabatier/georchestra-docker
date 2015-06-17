@@ -18,6 +18,12 @@ docker stop $(docker ps -a -q)
 docker rm $(docker ps -a -q)
 ```
 
+And to remove the linked volumes :
+
+```
+docker rm -v $(docker ps -a -q)
+```
+
 ## See details abouts running containers
 
 ```
