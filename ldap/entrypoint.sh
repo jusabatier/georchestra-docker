@@ -2,7 +2,7 @@
 
 set -e
 
-if [ "$(ls -A /var/lib/ldap)" == ".gitignore" ]; then
+if [ "$(ls -A /var/lib/ldap)" == ".gitignore" ] || [ -z "$(ls -A /var/lib/ldap)" ]; then
 	cat <<-EOF | debconf-set-selections
 	slapd slapd/internal/generated_adminpw password $SLAPD_PASSWORD
 	slapd slapd/internal/adminpw password $SLAPD_PASSWORD
@@ -87,7 +87,7 @@ fi
 
 if [[ ! -f /etc/cron.weekly/lastrun.log && ! -z "$(ls -A /etc/cron.weekly)" ]]; then
 	/etc/init.d/slapd start
-	run-parts /etc/cron-weekly
+	run-parts /etc/cron.weekly
 	kill -INT `cat /run/slapd/slapd.pid`
 fi
 
