@@ -53,7 +53,7 @@ ldap:
     - ./volumes/ldap_data/slapd.d:/etc/ldap/slapd.d
     - ./volumes/ldap_data/lib:/var/lib/ldap
     - ./ldap/cron.weekly:/etc/cron.weekly
-    - ./import:/tmp/ldap-import
+    - ./ldap/import:/tmp/ldap-import
   environment:
     SLAPD_PASSWORD: {{SLAPD_PASSWORD}}
     GEOSERVER_USER_PASS: {{GEOSERVER_USER_PASS}}
