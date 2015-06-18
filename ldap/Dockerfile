@@ -11,7 +11,7 @@ ADD https://raw.githubusercontent.com/georchestra/LDAP/master/georchestra.ldif /
 
 EXPOSE 389
 
-VOLUME  ["/var/log/ldap", "/etc/ldap/slapd.d","/var/lib/ldap","/etc/cron.weekly"]
+VOLUME  ["/var/log/ldap", "/etc/ldap/slapd.d","/var/lib/ldap","/etc/cron.weekly","/tmp/ldap-import"]
 
 COPY logrotate /etc/logrotate.d/openldap
 COPY entrypoint.sh /entrypoint.sh
