@@ -18,6 +18,7 @@ if [[ ! -f /var/lib/postgresql/docker-configured ]]; then
 	if [ -f /tmp/import-pgsql/import-georchestra.sql ]; then
 		psql -d georchestra -f /tmp/import-pgsql/import-georchestra.sql
 		psql -d georchestra -x -c "SELECT * FROM geofence.gf_gsinstance WHERE name='default-gs'" > /tmp/geofence-exists
+		# FIXME : Possible error if PG not in French
 		if [ "$(cat /tmp/geofence-exists)" == "(Aucune ligne)" ]; then
 			psql -d georchestra -c "INSERT INTO geofence.gf_gsinstance (id, baseURL, dateCreation, description, name, password, username) values (0, 'https://$GEORCHESTRA_HOSTNAME/geoserver', 'now', 'local geoserver', 'default-gs', '$GEOSERVER_USER_PASS', 'geoserver_privileged_user');"
 		else
