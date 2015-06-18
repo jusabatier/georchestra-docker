@@ -20,6 +20,10 @@ RUN mkdir -p /var/run/postgresql/9.4-main.pg_stat_tmp
 RUN chown postgres /var/run/postgresql/9.4-main.pg_stat_tmp
 RUN chgrp postgres /var/run/postgresql/9.4-main.pg_stat_tmp
 
+RUN sed -i "s/# fr_FR.UTF-8 UTF-8/fr_FR.UTF-8 UTF-8/g" /etc/locale.gen
+RUN /usr/sbin/locale-gen
+RUN export LANG=fr_FR.UTF-8
+
 USER postgres
 
 EXPOSE 5432
