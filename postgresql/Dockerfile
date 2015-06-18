@@ -28,7 +28,7 @@ USER postgres
 
 EXPOSE 5432
 
-VOLUME  ["/var/log/postgresql", "/var/lib/postgresql"]
+VOLUME  ["/var/log/postgresql", "/var/lib/postgresql","/tmp/import-pgsql"]
 
 COPY entrypoint.sh /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
