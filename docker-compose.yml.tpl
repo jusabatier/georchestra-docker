@@ -36,6 +36,7 @@ database:
   volumes:
     - ./logs:/var/log/postgresql
     - ./volumes/postgresql_data:/var/lib/postgresql
+    - ./postgresql/import:/tmp/import-pgsql
   environment:
     DB_MAIN_USER: {{DB_MAIN_USER}}
     DB_MAIN_USER_PASS: {{DB_MAIN_USER_PASS}}
