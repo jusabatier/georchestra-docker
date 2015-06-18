@@ -26,8 +26,16 @@ EOF
 	/etc/init.d/slapd start
 	ldapadd -Y EXTERNAL -H ldapi:/// -f /tmp/georchestra-bootstrap.ldif
 	ldapadd -Y EXTERNAL -H ldapi:/// -f /tmp/georchestra-memberof.ldif
-	ldapadd -D "cn=admin,dc=georchestra,dc=org" -w $SLAPD_PASSWORD -f /tmp/georchestra-root.ldif
-	ldapadd -D "cn=admin,dc=georchestra,dc=org" -w $SLAPD_PASSWORD -f /tmp/georchestra.ldif
+	
+	if [ -f /tmp/ldap-import/import.ldif ]; then
+		kill -INT `cat /run/slapd/slapd.pid`
+		slapadd -b "dc=georchestra,dc=org" -q -l /tmp/ldap-import/import.ldif
+		/etc/init.d/slapd start
+	else
+		ldapadd -D "cn=admin,dc=georchestra,dc=org" -w $SLAPD_PASSWORD -f /tmp/georchestra-root.ldif
+		ldapadd -D "cn=admin,dc=georchestra,dc=org" -w $SLAPD_PASSWORD -f /tmp/georchestra.ldif
+	fi
+	
 	ldappasswd -s $GEOSERVER_USER_PASS -w $SLAPD_PASSWORD -D "cn=admin,dc=georchestra,dc=org" -x "uid=geoserver_privileged_user,ou=users,dc=georchestra,dc=org"
 	
 	kill -INT `cat /run/slapd/slapd.pid`
