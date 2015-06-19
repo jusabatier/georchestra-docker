@@ -289,6 +289,7 @@ elk:
     - "5000"
   volumes:
     - ./elk/logstash/conf.d:/etc/logstash/conf.d
+    - ./elk/ssl:/etc/pki/tls/certs
   environment:
     SSL_PASSPHRASE: {{SSL_PASSPHRASE}}
     SSL_COUNTRY: {{SSL_COUNTRY}}
