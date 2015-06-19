@@ -142,6 +142,7 @@ class GenerateConfig {
 <entry key="ldapadmin"     value="http://ldapadmin_host:8080/ldapadmin/" />
 <entry key="mapfishapp"    value="http://mapfishapp_host:8080/mapfishapp/" />
 <entry key="cas"           value="http://cas_host:8080/cas" />
+<entry key="kibana"        value="http://elk_host:5601/" />
 <entry key="static"        value="http://header_host:8080/header/" />""".replaceAll("\n|\t","")
             properties['header.mapping'] = """
 <entry key="sec-email"     value="mail" />
