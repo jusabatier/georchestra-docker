@@ -304,3 +304,4 @@ elkclient:
     - elk:elk_host
   volumes:
     - ./logs:/var/log/georchestra-docker
+    - ./elk/ssl:/etc/pki/tls/certs
