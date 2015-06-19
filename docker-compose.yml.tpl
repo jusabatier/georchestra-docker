@@ -85,6 +85,7 @@ proxy:
     - geoserver:geoserver_host
     - geofence:geofence_host
     - geowebcache:geowebcache_host
+    - elk:elk_host
   volumes:
     - ./logs:/tmp/georchestra
     - ./logs/tomcat/proxy:/usr/local/tomcat/logs
@@ -280,3 +281,25 @@ geowebcache:
     JAVA_OPTS: "-Djava.awt.headless=true -XX:+UseConcMarkSweepGC -Xms1G -Xmx1G -XX:PermSize=256m -Djava.library.path=/usr/lib/jni -DGEOWEBCACHE_CACHE_DIR=/usr/local/tomcat/geowebcache_cachedir"
   extra_hosts:
     - {{GEORCHESTRA_HOSTNAME}}:{{GEORCHESTRA_PUBLIC_IP}}
+
+elk:
+  ports:
+    - "5601"
+    - "9200"
+    - "5000"
+  volumes:
+    - ./elk/logstash/conf.d:/etc/logstash/conf.d
+  environment:
+    SSL_PASSPHRASE: {{SSL_PASSPHRASE}}
+    SSL_COUNTRY: {{SSL_COUNTRY}}
+    SSL_STATE: {{SSL_STATE}}
+    SSL_LOCALITY: {{SSL_LOCALITY}}
+    SSL_ORGANISATION: {{SSL_ORGANISATION}}
+    SSL_UNIT: {{SSL_UNIT}}
+
+elkclient:
+  build: ./elk-client
+  links:
+    - elk:elk_host
+  volumes:
+    - ./logs:/var/log/georchestra-docker
