@@ -1,0 +1,169 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:p="http://www.springframework.org/schema/p"
+    xmlns:s="http://www.springframework.org/schema/security"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+        http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.1.xsd">
+
+    <bean id="properties-loader"
+        class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer"
+        p:locations="/WEB-INF/security-proxy.properties" />
+        
+    <s:http entry-point-ref="casProcessingFilterEntryPoint" path-type="regex" realm="${realmName}" disable-url-rewriting="true">
+        <s:intercept-url pattern=".*\?.*login.*" access="ROLE_SV_USER,ROLE_SV_EDITOR,ROLE_SV_REVIEWER,ROLE_SV_ADMIN,ROLE_ADMINISTRATOR" />
+        <s:intercept-url pattern=".*\?.*casLogin.*" access="ROLE_SV_USER,ROLE_SV_EDITOR,ROLE_SV_REVIEWER,ROLE_SV_ADMIN,ROLE_ADMINISTRATOR" />
+        <s:intercept-url pattern="/extractorapp/admin/.*" access="ROLE_ADMINISTRATOR" />
+        <s:intercept-url pattern="/extractorapp/jobs/.*" access="ROLE_ADMINISTRATOR" />
+        <s:intercept-url pattern="/extractorapp/.*" access="ROLE_MOD_EXTRACTORAPP" />
+        <s:intercept-url pattern="/geofence/.*" access="ROLE_ADMINISTRATOR" />
+        <s:intercept-url pattern="/kibana/.*" access="ROLE_ADMINISTRATOR" />
+        <s:intercept-url pattern="/analytics/.*" access="ROLE_MOD_ANALYTICS" />
+        <!-- ldapadmin private UI is restricted to members of the MOD_LDAPADMIN group: -->
+        <s:intercept-url pattern="/ldapadmin/privateui/.*" access="ROLE_MOD_LDAPADMIN" />
+        <!-- ldapadmin private ui web services: -->
+        <s:intercept-url pattern="/ldapadmin/private/.*" access="ROLE_MOD_LDAPADMIN" />
+        <!-- ldapadmin pages: -->
+        <s:intercept-url pattern="/ldapadmin/account/userdetails" access="IS_AUTHENTICATED_FULLY" />
+        <s:intercept-url pattern="/ldapadmin/account/changePassword" access="IS_AUTHENTICATED_FULLY" />
+        <!-- testPage for the gateway -->
+        <s:intercept-url pattern="/testPage" access="IS_AUTHENTICATED_FULLY" />
+        <!-- the integrated ogc proxy should not be used on production systems -->
+        <s:intercept-url pattern=".*/ogcproxy/.*" access="ROLE_NO_ONE" />
+<!--        <sec:intercept-url pattern=".*\?.*login.*" access="IS_AUTHENTICATED_FULLY" />-->
+        <s:intercept-url pattern=".*" access="IS_AUTHENTICATED_ANONYMOUSLY,ROLE_SV_USER,ROLE_SV_EDITOR,ROLE_SV_REVIEWER,ROLE_SV_ADMIN,ROLE_ADMINISTRATOR" />
+        <!-- s:form-login / -->
+        <s:custom-filter ref="basicAuthChallengeByUserAgent" before="CAS_FILTER" />
+        <s:custom-filter ref="casFilter" after="CAS_FILTER" />
+        <s:http-basic/>
+        <s:anonymous granted-authority="ROLE_ANONYMOUS"/>
+        <s:logout logout-success-url="${logout-success-url}"/>
+        <!-- Limits the number of concurrent sessions a user can have -->
+        <!--<sec:concurrent-session-control max-sessions="1" exception-if-maximum-exceeded="true"/>-->
+    </s:http>
+
+    <s:authentication-manager alias="authenticationManager">
+        <s:authentication-provider ref='casAuthenticationProvider' />
+        <s:authentication-provider ref='ldapAuthenticationProvider' />
+    </s:authentication-manager>
+
+    <bean id="basicAuthChallengeByUserAgent" class="org.georchestra.security.BasicAuthChallengeByUserAgent">
+        <property name="challengeUserAgents">
+            <list>
+            	<!-- uncomment the lines for which you want a preemptive basic auth -->
+            	<!-- note that this will prevent access to public layers for users with no account -->
+                <!--value>.*ArcGIS.*</value-->
+                <!--value>.*uDig.*</value-->
+                <!--value>.*QGIS.*</value-->
+                <value>.*Jakarta.*</value> <!-- GeoFence UA for GeoServer REST -->
+                <value>.*Apache-HttpClient.*</value> <!-- Extractorapp client -->
+            </list>
+        </property>
+        <property name="ignoreHttps" value="true" />
+        <property name="ignoreFailure" value="false"/>
+        <property name="credentialsCharset" value="UTF-8"/>
+        <property name="authenticationManager" ref="authenticationManager"/>
+        <property name="authenticationEntryPoint">
+            <bean class="org.springframework.security.web.authentication.www.BasicAuthenticationEntryPoint">
+                <property name="realmName" value="${realmName}"/>
+            </bean>
+        </property>
+    </bean>
+    <!-- This bean points at the embedded directory server created by the ldap-server element above  -->
+    <bean id="contextSource" class="org.springframework.security.ldap.DefaultSpringSecurityContextSource">
+        <constructor-arg value="${ldapUrl}/${baseDN}"/>
+        <property name="userDn" value="${ldapAdminDn}" />
+	    <property name="password" value="${ldap.admin.password}" />
+        <property name="baseEnvironmentProperties">
+	        <map>
+                <entry>
+                    <key>
+                        <value>java.naming.security.authentication</value>
+	              </key>
+                    <value>simple</value>
+                  </entry>
+             </map>
+         </property>
+     </bean>
+
+    <bean id="ldapUserSearch" class="org.springframework.security.ldap.search.FilterBasedLdapUserSearch">
+        <constructor-arg index="0" value="${userSearchBaseDN}"/>
+        <constructor-arg index="1" value="${userSearchFilter}"/>
+        <constructor-arg index="2" ref="contextSource" />
+    </bean>
+                    
+    <bean id="ldapAuthoritiesPopulator" class="org.springframework.security.ldap.userdetails.DefaultLdapAuthoritiesPopulator">
+        <constructor-arg ref="contextSource" />
+        <constructor-arg value="${authoritiesBaseDN}" />
+        <property name="groupSearchFilter" value="${groupSearchFilter}"/>
+        <property name="rolePrefix" value="ROLE_"/>
+        <property name="searchSubtree" value="true"/>
+        <property name="convertToUpperCase" value="true"/>
+    </bean>
+
+    <bean id="ldapAuthenticationProvider" class="org.springframework.security.ldap.authentication.LdapAuthenticationProvider">
+        <constructor-arg>
+            <bean class="org.springframework.security.ldap.authentication.BindAuthenticator">
+                <constructor-arg ref="contextSource" />
+                <property name="userSearch" ref="ldapUserSearch"/>
+            </bean>
+        </constructor-arg>
+        <constructor-arg ref="ldapAuthoritiesPopulator" />
+    </bean>
+
+    <bean id="userService" class="org.springframework.security.ldap.userdetails.LdapUserDetailsService">
+        <constructor-arg index="0" ref="ldapUserSearch" />
+        <constructor-arg index="1" ref="ldapAuthoritiesPopulator" />
+    </bean>
+
+    <!-- start cas config -->
+    <bean id="casAuthenticationFilter" class="org.springframework.security.cas.web.CasAuthenticationFilter">
+        
+        <property name="authenticationManager" ref="authenticationManager"/>
+        <property name="authenticationFailureHandler">
+            <bean class="org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler">
+                <property name="defaultFailureUrl" value="/casfailed.jsp"/>
+            </bean>
+        </property>
+        <property name="authenticationSuccessHandler">
+            <bean class="org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler">
+                <property name="defaultTargetUrl" value="/"/>
+            </bean>
+        </property>
+    </bean>
+
+    <bean id="casFilter"
+      class="org.springframework.security.cas.web.CasAuthenticationFilter">
+      <property name="authenticationManager" ref="authenticationManager" />
+    </bean>
+
+    <bean id="casProcessingFilterEntryPoint" class="org.springframework.security.cas.web.CasAuthenticationEntryPoint">
+        <property name="loginUrl" value="${casLoginUrl}"/>
+        <property name="serviceProperties" ref="serviceProperties"/>
+    </bean>
+
+    <bean id="casAuthenticationProvider" class="org.springframework.security.cas.authentication.CasAuthenticationProvider">
+        <property name="userDetailsService" ref="userService" />
+        <property name="serviceProperties" ref="serviceProperties" />
+        <property name="ticketValidator">
+                <bean class="org.jasig.cas.client.validation.Cas20ServiceTicketValidator">
+                        <constructor-arg index="0" value="${casTicketValidation}" />
+            </bean>
+        </property>
+        <property name="key" value="security-proxy"/>
+    </bean>
+
+    <bean id="serviceProperties" class="org.springframework.security.cas.ServiceProperties">
+        <property name="service" value="${proxyCallback}"/>
+        <property name="sendRenew" value="false"/>
+    </bean>
+    
+    <bean
+        id="messageSource"
+        class="org.springframework.context.support.ReloadableResourceBundleMessageSource"
+        p:basenames="WEB-INF/i18n/application"
+        p:defaultEncoding="UTF-8"
+        p:fallbackToSystemLocale="false">
+    </bean>
+    <!-- end cas config -->
+</beans>
