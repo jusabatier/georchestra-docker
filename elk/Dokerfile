@@ -27,7 +27,7 @@ RUN mkdir -p /etc/pki/tls/certs && mkdir /etc/pki/tls/private
 
 EXPOSE 5601 9200 5000
 
-VOLUME  ["/etc/logstash/conf.d"]
+VOLUME  ["/etc/logstash/conf.d","/etc/pki/tls/certs"]
 
 COPY entrypoint.sh /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
