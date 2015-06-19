@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -ve
+set -e
 
 if [[ ! -f /usr/share/nginx/georchestra/ssl/georchestra.chained.crt || ! -f /usr/share/nginx/georchestra/ssl/georchestra.key ]]; then
 	rm -rf /usr/share/nginx/georchestra/ssl/*
