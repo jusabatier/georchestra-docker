@@ -283,6 +283,7 @@ geowebcache:
     - {{GEORCHESTRA_HOSTNAME}}:{{GEORCHESTRA_PUBLIC_IP}}
 
 elk:
+  build: ./elk
   ports:
     - "5601"
     - "9200"
