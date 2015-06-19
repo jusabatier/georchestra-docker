@@ -44,11 +44,9 @@ sudo restart docker
 
 To install Compose, run the following commands :
 ```
-curl -L https://github.com/docker/compose/releases/download/1.3.0rc3/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose
+curl -L https://github.com/docker/compose/releases/download/1.3.0/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose
 chmod +x /usr/local/bin/docker-compose
 ```
-
-We use Docker-compose 1.3 RC3 to take advantage of extra_host function. (1.3 will be available very soon)
 
 Note: If you get a "Permission denied" error, your /usr/local/bin directory probably isn't writable and you'll need to install Compose as the superuser. Run sudo -i, then the two commands above, then exit.
 
