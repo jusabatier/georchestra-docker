@@ -24,6 +24,8 @@ Your LDAP directory will be imported at next container's launch.
 
 > Note : the user with DN _uid=geoserver_privileged_user,ou=users,dc=georchestra,dc=org_ will be updated with the password set in configuration.txt
 
+
+
 ## Import Postgres/PostGIS databases
 
 If you have already a Georchestra database configured or other databases to import, you should want to import them.
