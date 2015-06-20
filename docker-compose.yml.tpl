@@ -303,7 +303,7 @@ elk:
     - {{GEORCHESTRA_HOSTNAME}}:{{GEORCHESTRA_PUBLIC_IP}}
 
 elkclient:
-  build: ./elkclient
+  build: ./elk-client
   privileged: true
   links:
     - elk:elk_host
