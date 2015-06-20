@@ -284,6 +284,7 @@ geowebcache:
 
 elk:
   build: ./elk
+  privileged: true
   ports:
     - "5601"
     - "9200"
@@ -301,6 +302,7 @@ elk:
 
 elkclient:
   build: ./elk-client
+  privileged: true
   links:
     - elk:elk_host
   volumes:
