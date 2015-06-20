@@ -32,4 +32,4 @@ VOLUME  ["/etc/logstash/conf.d","/etc/pki/tls/certs"]
 COPY entrypoint.sh /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
 
-CMD service elasticsearch start && service kibana4 start && service nginx start && service logstash start && tail -F /var/log/nginx/error.log
+CMD service elasticsearch start && service kibana4 start && service logstash start && tail -F /var/log/nginx/error.log
