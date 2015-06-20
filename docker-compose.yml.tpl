@@ -299,12 +299,16 @@ elk:
     SSL_LOCALITY: {{SSL_LOCALITY}}
     SSL_ORGANISATION: {{SSL_ORGANISATION}}
     SSL_UNIT: {{SSL_UNIT}}
+  extra_hosts:
+    - {{GEORCHESTRA_HOSTNAME}}:{{GEORCHESTRA_PUBLIC_IP}}
 
 elkclient:
-  build: ./elk-client
+  build: ./elkclient
   privileged: true
   links:
     - elk:elk_host
   volumes:
     - ./logs:/var/log/georchestra-docker
     - ./elk/ssl:/etc/pki/tls/certs
+  extra_hosts:
+    - {{GEORCHESTRA_HOSTNAME}}:{{GEORCHESTRA_PUBLIC_IP}}
