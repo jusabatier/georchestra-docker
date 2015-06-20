@@ -3,7 +3,7 @@
 set -e
 
 openssl genrsa -des3 -passout pass:$SSL_PASSPHRASE -out /tmp/elk-protected.key 2048
-openssl req -key /tmp/elk-protected.key -subj "/C=$SSL_COUNTRY/ST=$SSL_STATE/L=$SSL_LOCALITY/O=$SSL_ORGANISATION/OU=$SSL_UNIT/CN=elk_host" -newkey rsa:2048 -sha256 -out /tmp/elk.csr -passin pass:$SSL_PASSPHRASE
+openssl req -key /tmp/elk-protected.key -subj "/C=$SSL_COUNTRY/ST=$SSL_STATE/L=$SSL_LOCALITY/O=$SSL_ORGANISATION/OU=$SSL_UNIT/CN=kibana_host" -newkey rsa:2048 -sha256 -out /tmp/elk.csr -passin pass:$SSL_PASSPHRASE
 openssl rsa -in /tmp/elk-protected.key -out /tmp/elk.key -passin pass:$SSL_PASSPHRASE
 openssl x509 -req -days 365 -in /tmp/elk.csr -signkey /tmp/elk-protected.key -out /tmp/elk.chained.crt -passin pass:$SSL_PASSPHRASE
 
