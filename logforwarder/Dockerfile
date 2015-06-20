@@ -14,4 +14,4 @@ COPY ./logstash-forwarder.conf /etc/logstash-forwarder.conf
 
 VOLUME  ["/var/log/georchestra-docker","/etc/pki/tls/certs"]
 
-CMD service logstash-forwarder start && tail -F /var/log/logstash-forwarder/logstash-forwarder.err
+CMD sleep 300 && service logstash-forwarder start && tail -F /var/log/logstash-forwarder/logstash-forwarder.err
