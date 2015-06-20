@@ -34,9 +34,9 @@ if [[ ! -f /var/lib/postgresql/docker-configured ]]; then
 		psql -d georchestra -f /tmp/ogcstatistics.sql
 	fi
 	
-	for f in /tmp/import-pgsql/*.sql
+	for f in /tmp/import-pgsql/*
 	do
-		if [ "$f" != "/tmp/import-pgsql/import-georchestra.sql" ]; then
+		if [ "$f" != "/tmp/import-pgsql/import-georchestra.sql" ] && [ "$f" == "*.sql" ]; then
 			psql -d georchestra -f $f
 		fi
 	done
