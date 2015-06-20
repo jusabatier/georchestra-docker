@@ -85,7 +85,7 @@ proxy:
     - geoserver:geoserver_host
     - geofence:geofence_host
     - geowebcache:geowebcache_host
-    - elk:elk_host
+    - kibana:kibana_host
   volumes:
     - ./logs:/tmp/georchestra
     - ./logs/tomcat/proxy:/usr/local/tomcat/logs
@@ -282,16 +282,16 @@ geowebcache:
   extra_hosts:
     - {{GEORCHESTRA_HOSTNAME}}:{{GEORCHESTRA_PUBLIC_IP}}
 
-elk:
-  build: ./elk
+kibana:
+  build: ./kibana
   privileged: true
   ports:
     - "5601"
     - "9200"
     - "5000"
   volumes:
-    - ./elk/logstash/conf.d:/etc/logstash/conf.d
-    - ./elk/ssl:/etc/pki/tls/certs
+    - ./kibana/logstash/conf.d:/etc/logstash/conf.d
+    - ./kibana/ssl:/etc/pki/tls/certs
   environment:
     SSL_PASSPHRASE: {{SSL_PASSPHRASE}}
     SSL_COUNTRY: {{SSL_COUNTRY}}
@@ -302,13 +302,13 @@ elk:
   extra_hosts:
     - {{GEORCHESTRA_HOSTNAME}}:{{GEORCHESTRA_PUBLIC_IP}}
 
-elkclient:
-  build: ./elk-client
+logforwarder:
+  build: ./logforwarder
   privileged: true
   links:
-    - elk:elk_host
+    - kibana:kibana_host
   volumes:
     - ./logs:/var/log/georchestra-docker
-    - ./elk/ssl:/etc/pki/tls/certs
+    - ./kibana/ssl:/etc/pki/tls/certs
   extra_hosts:
     - {{GEORCHESTRA_HOSTNAME}}:{{GEORCHESTRA_PUBLIC_IP}}
