@@ -24,7 +24,7 @@ GEORCHESTRA_ANALYTICS_ACTIVATED="false"
 
 ## SSL Configuration
 ## If you have already georchestra.chained.crt and georchestra.key files for your domain (for prod),
-## you can put them in nginx/georchestra-site/ssl directory and skip it.
+## you can put them in nginx/georchestra-site/ssl directory and skip the SSL Unit, but others are required to generate certs for kibana.
 SSL_PASSPHRASE="georchestra-docker"
 SSL_COUNTRY="FR"
 SSL_STATE="Auvergne"
