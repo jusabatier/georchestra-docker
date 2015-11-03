@@ -1,4 +1,4 @@
-FROM tomcat:7-jre8
+FROM tomcat:8-jre8
 
 RUN echo "deb http://ftp.fr.debian.org/debian jessie contrib non-free" >> /etc/apt/sources.list
 RUN echo "deb http://security.debian.org/ jessie/updates contrib non-free" >> /etc/apt/sources.list
